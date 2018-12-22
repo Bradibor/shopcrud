@@ -9,67 +9,55 @@ import java.util.List;
 
 @Data
 public class Shop {
+    private Long id;
     private Address address;
     private List<Product> products;
-    private List<Supplier> suppliers;
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     static public class Address {
         private String city;
         private String street;
         private String house;
+        private String building;
     }
 
     @Data
     static public class Product {
         private Long id;
-        private Supplier supplier;
+        private Long supplier_id;
         private Price price;
-        private Dimensions dimensions;
-        private Long weight;
+        private Quantity quantity;
         private String description;
+    }
+
+    @Data
+    static public class Quantity {
+        private String type;
+        private Integer value;
     }
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     static public class Price {
-        private String priceRUR;
-        private String priceUSD;
+        private String currency;
+        private String price;
     }
 
-    @Data
-    static public class Supplier {
-        private Long id;
-        private String name;
-        private Country country;
-    }
-
-    @Data
-    static public class Country {
-        private String name;
-        private String code;
-    }
-
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    static public class Dimensions {
-        private Long x;
-        private Long y;
-        private Long z;
-    }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(String.join(" ", address.getCity(), address.getStreet(), address.getHouse()));
         sb.append("\nProducts: ");
-        products.forEach(product -> {
-            sb.append("\n"+String.join(" ", product.id+"", product.description,
-                    product.getPrice().getPriceRUR()+"Р./"+product.getPrice().getPriceUSD()+"$",
-                    String.join("x", product.dimensions.x+"", product.dimensions.y+"", product.dimensions.z+"")));
-        });
+        if(products != null) {
+            products.forEach(product -> {
+                sb.append("\n" + String.join(" ", product.id + "", product.description,
+                        product.getPrice().getPrice() + product.getPrice().getCurrency()));
+            });
+        }
         return sb.toString();
     }
 }
