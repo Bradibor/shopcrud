@@ -2,6 +2,7 @@ package ru.mirea.shopcrud;
 
 import ru.mirea.shopcrud.domain.Shop;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.List;
@@ -11,12 +12,15 @@ public class Application {
     public static void main(String[] args) throws FileNotFoundException {
 //        todo: добавить редактирование продуктов
         XmlRepository xmlRepository = new XmlRepository();
+        XmlTranformator xmlTranformator = new XmlTranformator();
         Scanner scanner = new Scanner(System.in);
         System.out.println("enter working dir: ");
         String workDir = scanner.next();
         System.out.println("enter filename to load: ");
         String fileName = scanner.next();
-        List<Shop> shops = xmlRepository.load(Paths.get(workDir, fileName));
+        File file = Paths.get(workDir, fileName).toFile();
+        File converted = xmlTranformator.convertFrom(file);
+        List<Shop> shops = xmlRepository.load(converted.toPath());
         shops.forEach(System.out::println);
         System.out.println("enter +/- to add/delete shop, x to exit: ");
         String input = scanner.next();
@@ -31,8 +35,10 @@ public class Application {
         }
         System.out.println("save changes? y/n");
         input = scanner.next();
-        if(input.equals("y"))
-        xmlRepository.save(shops, Paths.get(workDir, fileName));
+        if(input.equals("y")) {
+            xmlRepository.save(shops, converted.toPath());
+            xmlTranformator.convertTo(file);
+        }
     }
 
     private static void add(Scanner scanner, List<Shop> shops) {

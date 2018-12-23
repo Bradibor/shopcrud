@@ -22,12 +22,6 @@ import java.util.Optional;
 public class XmlRepository {
     public List<Shop> load(Path path) {
         try {
-//            File inputFile = path.toFile();
-//            SAXParserFactory factory = SAXParserFactory.newInstance();
-//            SAXParser saxParser = factory.newSAXParser();
-//            Handler userhandler = new Handler();
-//            saxParser.parse(inputFile, userhandler);
-//            return userhandler.getShop();
             DocumentBuilderFactory factory =
                     DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
